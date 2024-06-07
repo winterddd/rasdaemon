@@ -24,11 +24,11 @@
 #include <string.h>
 #include <traceevent/kbuffer.h>
 #include <unistd.h>
-
 #include "ras-logger.h"
 #include "ras-mce-handler.h"
 #include "ras-report.h"
 #include "types.h"
+#include "trigger.h"
 
 /*
  * The code below were adapted from Andi Kleen/Intel/SuSe mcelog code,
@@ -240,7 +240,7 @@ ret:
 	return ret;
 }
 
-int register_mce_handler(struct ras_events *ras, unsigned int ncpus)
+int register_mce_handler(struct ras_events *ras, unsigned ncpus)
 {
 	int rc;
 	struct mce_priv *mce;

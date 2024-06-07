@@ -125,5 +125,4 @@ install-data-local:
 	$(install_sh) -d "$(DESTDIR)@sysconfdir@/ras/dimm_labels.d"
 	$(install_sh) -d "$(DESTDIR)@sysconfdir@/ras/triggers"
 	$(install_sh) @abs_srcdir@/misc/rasdaemon.env "$(DESTDIR)@SYSCONFDEFDIR@/rasdaemon"
-	$(install_sh) @abs_srcdir@/contrib/mc_event_trigger "$(DESTDIR)@sysconfdir@/ras/triggers/mc_event_trigger"
-	$(install_sh) @abs_srcdir@/contrib/mem_fail_trigger "$(DESTDIR)@sysconfdir@/ras/triggers/mem_fail_trigger"
+	$(install_sh) @abs_srcdir@/contrib/*_trigger "$(DESTDIR)@sysconfdir@/ras/triggers/"

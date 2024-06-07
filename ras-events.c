@@ -65,11 +65,6 @@
 
 char *choices_disable;
 
-static const struct event_trigger event_triggers[] = {
-	{ "mc_event", &mc_event_trigger_setup },
-	{ "memory_failure_event", &mem_fail_event_trigger_setup },
-};
-
 static int get_debugfs_dir(char *tracing_dir, size_t len)
 {
 	FILE *fp;
@@ -299,17 +294,6 @@ int toggle_ras_mc_event(int enable)
 free_ras:
 	free(ras);
 	return rc;
-}
-
-static void setup_event_trigger(char *event)
-{
-	struct event_trigger trigger;
-
-	for (int i = 0; i < ARRAY_SIZE(event_triggers); i++) {
-		trigger = event_triggers[i];
-		if (!strcmp(event, trigger.name))
-			trigger.setup();
-	}
 }
 
 #ifndef HAVE_BLK_RQ_ERROR
@@ -885,8 +869,6 @@ static int add_event_handler(struct ras_events *ras, struct tep_handle *pevent,
 		return EINVAL;
 	}
 
-	setup_event_trigger(event);
-
 	log(ALL, LOG_INFO, "Enabled event %s:%s\n", group, event);
 
 	return 0;
@@ -939,6 +921,8 @@ int handle_ras_events(int record_events)
 	/* FIXME: enable memory isolation unconditionally */
 	ras_page_account_init();
 #endif
+
+	trigger_setup();
 
 	rc = add_event_handler(ras, pevent, page_size, "ras", "mc_event",
 			       ras_mc_event_handler, NULL, MC_EVENT);
