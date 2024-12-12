@@ -78,6 +78,7 @@ struct mce_event {
 	char		mcastatus_msg[1024];
 	char		user_action[4096];
 	char		mc_location[256];
+	int		erst;
 };
 
 struct mce_priv {
@@ -170,4 +171,6 @@ int parse_amd_k8_event(struct ras_events *ras, struct mce_event *e);
 
 int parse_amd_smca_event(struct ras_events *ras, struct mce_event *e);
 
+void report_mce_event(struct ras_events *ras, struct tep_record *record,
+		      struct trace_seq *s, struct mce_event *e);
 #endif

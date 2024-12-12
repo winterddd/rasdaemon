@@ -267,9 +267,8 @@ int register_mce_handler(struct ras_events *ras, unsigned int ncpus)
  * End of mcelog's code
  */
 
-static void report_mce_event(struct ras_events *ras,
-			     struct tep_record *record,
-			     struct trace_seq *s, struct mce_event *e)
+void report_mce_event(struct ras_events *ras, struct tep_record *record,
+		      struct trace_seq *s, struct mce_event *e)
 {
 	time_t now;
 	struct tm *tm;
@@ -284,10 +283,14 @@ static void report_mce_event(struct ras_events *ras,
 	 * not available (legacy kernels).
 	 */
 
-	if (ras->use_uptime)
-		now = record->ts / user_hz + ras->uptime_diff;
-	else
-		now = time(NULL);
+	if (!e->erst) {
+		if (ras->use_uptime)
+			now = record->ts / user_hz + ras->uptime_diff;
+		else
+			now = time(NULL);
+	} else {
+		now = e->walltime;
+	}
 
 	tm = localtime(&now);
 	if (tm)
